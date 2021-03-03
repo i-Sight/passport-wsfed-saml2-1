@@ -1,6 +1,6 @@
 {
   "name": "passport-wsfed-saml2",
-  "version": "4.0.0",
+  "version": "2.11.2",
   "description": "SAML2 Protocol and WS-Fed library",
   "scripts": {
     "test": "mocha --reporter spec --recursive"
@@ -20,31 +20,30 @@
   "main": "./lib/passport-wsfed-saml2",
   "dependencies": {
     "cryptiles": "~0.2.2",
-    "ejs": "2.5.5",
+    "ejs": "~0.8.3",
     "jsonwebtoken": "~5.0.4",
     "passport-strategy": "^1.0.0",
     "uid2": "0.0.x",
-    "valid-url": "^1.0.9",
-    "x509": "^0.3.4",
-    "xml-crypto": "auth0/xml-crypto#fix-digest",
-    "xml-encryption": "0.11.0",
+    "xml-crypto": "https://github.com/auth0/xml-crypto/tarball/064dc3464669d2ce567a01bff7a4a073420dda6d",
+    "xml-encryption": "~0.8.0",
     "xml2js": "0.1.x",
-    "xmldom": "auth0/xmldom#v0.1.19-auth0_1",
+    "xmldom": "https://github.com/auth0/xmldom/tarball/master",
     "xpath": "0.0.5",
     "xtend": "~2.0.3"
   },
   "devDependencies": {
     "chai": "2.x.x",
     "chai-passport-strategy": "1.x.x",
-    "cheerio": "~0.19.0",
     "express": "~3.1.0",
     "mocha": "~1.8.1",
-    "passport": "^0.3.2",
     "request": "~2.14.0",
+    "cheerio": "~0.19.0",
+    "moment": "~1.7.2",
     "saml": "~0.4.4",
-    "samlp": "~0.4.3",
+    "wsfed": "~0.3.5",
     "should": "~1.1.0",
-    "wsfed": "~0.3.5"
+    "samlp": "~0.4.3",
+    "passport": "^0.3.2"
   },
   "engines": {
     "node": ">= 0.6.0"
@@ -66,5 +65,12 @@
     "authentication",
     "identity",
     "adfs"
-  ]
+  ],
+  "readme": "Passport-wsfed-saml2\r\n=============\r\n\r\n[![Build Status](https://travis-ci.org/auth0/passport-wsfed-saml2.png)](https://travis-ci.org/auth0/passport-wsfed-saml2)\r\n\r\nThis is a ws-federation protocol + SAML2 tokens authentication provider for [Passport](http://passportjs.org/).\r\n\r\nThe code was originally based on Henri Bergius's [passport-saml](https://github.com/bergie/passport-saml) library.\r\n\r\nPassport-wsfed-saml2 has been tested to work with both [Windows Azure Active Directory / Access Control Service](https://www.windowsazure.com/en-us/home/features/identity/) and with [Microsoft Active Directory Federation Services](http://en.wikipedia.org/wiki/Active_Directory_Federation_Services).\r\n\r\n## Installation\r\n\r\n    $ npm install passport-wsfed-saml2\r\n\r\n## Usage\r\n\r\n### Configure strategy\r\n\r\nThis example utilizes a development namespace (auth10-dev) on [Windows Azure Access Control Service](https://www.windowsazure.com/en-us/home/features/identity/) and is using Google as the only identity provider configured for the sample application.\r\n\r\n\r\n```javascript\r\npassport.use(new wsfedsaml2(\r\n  {\r\n    path: '/login/callback',\r\n    realm: 'urn:node:app',\r\n    homeRealm: '', // optionally specify an identity provider to avoid showing the idp selector\r\n    identityProviderUrl: 'https://auth10-dev.accesscontrol.windows.net/v2/wsfederation',\r\n    cert: 'MIIDFjCCAf6gAwIBAgIQDRRprj9lv5RBvaQdlFltDzANBgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRhdXRoMTAtZGV2LmFjY2Vzc2NvbnRyb2wud2luZG93cy5uZXQwHhcNMTEwOTIxMDMzMjMyWhcNMTIwOTIwMDkzMjMyWjAvMS0wKwYDVQQDEyRhdXRoMTAtZGV2LmFjY2Vzc2NvbnRyb2wud2luZG93cy5uZXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCEIAEB/KKT3ehNMy2MQEyJIQ14CnZ8DC2FZgL5Gw3UBSdRb9JinK/gw7yOQtwKfJUqeoZaUSAAdcdbgqwVxOnMBfWiYX7DGlEznSfqYVnjOWjqqjpoe0h6RaOkdWovDtoidmqVV1tWRJFjkj895clPxkLpnqqcycfXtSdZen0SroGyirD2mhMc9ccLbJ3zRnBNjlvpo5zow1zYows09tNC2EhGROL/OS4JNRQnJRICZC+WkA7Igf3xb4btJOzIPYhFiqCGrd/81CHmAyEuNzyc60I5yomDQfZ91Eb5Uk3F7mlfAlYB2aZwDwldLSOlVE8G1E5xFexF/5KyPC4ShNodAgMBAAGjLjAsMAsGA1UdDwQEAwIE8DAdBgNVHQ4EFgQUyYfx/r0czsPgTzitqey+fGMQpkcwDQYJKoZIhvcNAQEFBQADggEBAB5dgQlM3tKS+/cjlvMCPjZH0Iqo/Wxecri3YWi2iVziZ/TQ3dSV+J/iTyduN7rJmFQzTsNERcsgyAwblwnEKXXvlWo8G/+VDIMh3zVPNQFKns5WPkfkhoSVlnZPTQ8zdXAcWgDXbCgvdqIPozdgL+4l0W0XVL1ugA4/hmMXh4TyNd9Qj7MWvlmwVjevpSqN4wG735jAZFHb/L/vvc91uKqP+JvLNj8tPFVxatzi56X1V8jBM61Hx1Z9D0RCDjtmcQVysVEylW9O6mNy6ZrhLm0q5yecWudfBbTKDqRoCHQRjrMU2c5q/ZFDtgjLim7FaNxFbgTyjeRCPclEhfemYVg='\r\n  },\r\n  function(profile, done) {\r\n    findByEmail(profile.email, function(err, user) {\r\n      if (err) {\r\n        return done(err);\r\n      }\r\n      return done(null, user);\r\n    });\r\n  })\r\n));\r\n```\r\n\r\n### Provide the authentication callback\r\n\r\nYou need to provide a route corresponding to the `path` configuration parameter given to the strategy:\r\n\r\n```javascript\r\napp.post('/login/callback',\r\n  passport.authenticate('wsfed-saml2', { failureRedirect: '/', failureFlash: true }),\r\n  function(req, res) {\r\n    res.redirect('/');\r\n  }\r\n);\r\n```\r\n\r\n### Jwt\r\n\r\nAlthough this started as wsfed&saml we added support for wsfed&jwt. Usage is\r\n\r\n~~~javascript\r\npassport.use(new wsfedsaml2(\r\n  {\r\n    jwt: {\r\n      //same options than node-jsonwebtoken\r\n      algorithm: 'RS256'\r\n    },\r\n    cert: 'MIIDFjCCAf6gAwIBAgIQDRRprj9lv5RBvaQdlFltDzANBgkqhkiG9w0BAQUFADAvMS0wKwYDVQQDEyRhdXRoMTAtZGV2LmFjY2Vzc2NvbnRyb2wud2luZG93cy5uZXQwHhcNMTEwOTIxMDMzMjMyWhcNMTIwOTIwMDkzMjMyWjAvMS0wKwYDVQQDEyRhdXRoMTAtZGV2LmFjY2Vzc2NvbnRyb2wud2luZG93cy5uZXQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCEIAEB/KKT3ehNMy2MQEyJIQ14CnZ8DC2FZgL5Gw3UBSdRb9JinK/gw7yOQtwKfJUqeoZaUSAAdcdbgqwVxOnMBfWiYX7DGlEznSfqYVnjOWjqqjpoe0h6RaOkdWovDtoidmqVV1tWRJFjkj895clPxkLpnqqcycfXtSdZen0SroGyirD2mhMc9ccLbJ3zRnBNjlvpo5zow1zYows09tNC2EhGROL/OS4JNRQnJRICZC+WkA7Igf3xb4btJOzIPYhFiqCGrd/81CHmAyEuNzyc60I5yomDQfZ91Eb5Uk3F7mlfAlYB2aZwDwldLSOlVE8G1E5xFexF/5KyPC4ShNodAgMBAAGjLjAsMAsGA1UdDwQEAwIE8DAdBgNVHQ4EFgQUyYfx/r0czsPgTzitqey+fGMQpkcwDQYJKoZIhvcNAQEFBQADggEBAB5dgQlM3tKS+/cjlvMCPjZH0Iqo/Wxecri3YWi2iVziZ/TQ3dSV+J/iTyduN7rJmFQzTsNERcsgyAwblwnEKXXvlWo8G/+VDIMh3zVPNQFKns5WPkfkhoSVlnZPTQ8zdXAcWgDXbCgvdqIPozdgL+4l0W0XVL1ugA4/hmMXh4TyNd9Qj7MWvlmwVjevpSqN4wG735jAZFHb/L/vvc91uKqP+JvLNj8tPFVxatzi56X1V8jBM61Hx1Z9D0RCDjtmcQVysVEylW9O6mNy6ZrhLm0q5yecWudfBbTKDqRoCHQRjrMU2c5q/ZFDtgjLim7FaNxFbgTyjeRCPclEhfemYVg='\r\n  },\r\n  function(profile, done) {\r\n    findByEmail(profile.email, function(err, user) {\r\n      if (err) {\r\n        return done(err);\r\n      }\r\n      return done(null, user);\r\n    });\r\n  })\r\n));\r\n~~~\r\n\r\n### Configure strategy for ADFS (WS-Fed)\r\n\r\nThis example utilizes a strategy with ADFS using WS-Fed.\r\n\r\n```javascript\r\npassport.use('wsfed-saml2', new wsfedsaml2({\r\n\t// ADFS RP identifier\r\n\trealm: 'urn:node:wsfedapp',\r\n\tidentityProviderUrl: 'https://my-adfs/adfs/ls',\r\n\t// ADFS token signing certificate\r\n\tthumbprint: '5D27....D27E'\r\n\t// or options.cert: fs.readFileSync(\"adfs_signing_key.cer\") \r\n}, function (profile, done) {\r\n // ...\r\n}));\r\n\r\n```\r\n\r\n### Configure strategy for ADFS (SAMLp)\r\n\r\nThis example utilizes a strategy using SAMLp and RP token encryption.\r\n\r\n```javascript\r\npassport.use('wsfed-saml2', new wsfedsaml2({\r\n\t// ADFS RP identifier\r\n\trealm: 'urn:node:samlapp',\r\n\tidentityProviderUrl: 'https://my-adfs/adfs/ls',\r\n    // ADFS token signing certificate\r\n    thumbprint: '5D27...D27E',\r\n\t// or options.cert: fs.readFileSync(\"adfs_signing_key.cer\") \r\n    protocol: \"samlp\",\r\n\t// This is the private key (use case where ADFS \r\n\t// is configured for RP token encryption)\r\n    decryptionKey: fs.readFileSync(\"server.key\")\r\n}, function (profile, done) {\r\n // ...\r\n}));\r\n```\r\n\r\n## Issue Reporting\r\n\r\nIf you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.\r\n\r\n## Author\r\n\r\n[Auth0](auth0.com)\r\n\r\n## License\r\n\r\nThis project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.\r\n",
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/auth0/passport-wsfed-saml2#readme",
+  "_id": "passport-wsfed-saml2@2.11.2",
+  "_shasum": "b11d45643463c28912ebc3867ea8f6272f57319c",
+  "_resolved": "https://registry.npmjs.org/passport-wsfed-saml2/-/passport-wsfed-saml2-2.11.2.tgz",
+  "_from": "https://registry.npmjs.org/passport-wsfed-saml2/-/passport-wsfed-saml2-2.11.2.tgz"
 }
